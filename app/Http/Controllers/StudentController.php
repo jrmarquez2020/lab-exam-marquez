@@ -55,30 +55,34 @@ class StudentController extends Controller
         return view('students.edit', compact('student', 'courses'));
     }
 
-    public function update(Request $request, Student $student)
-    {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => [
-                'required',
-                'email',
-                'max:255',
-                Rule::unique('students', 'email')->ignore($student->id),
-            ],
-            'course_id' => ['required', 'exists:courses,id'],
-        ]);
+   public function update(Request $request, Student $student)
+{
+    $this->authorize('update', $student);
 
-        $student->update($validated);
+    $validated = $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => [
+            'required',
+            'email',
+            'max:255',
+            Rule::unique('students', 'email')->ignore($student->id),
+        ],
+        'course_id' => ['required', 'exists:courses,id'],
+    ]);
 
-        return redirect()->route('students.index')
-            ->with('success', 'Student updated successfully.');
-    }
+    $student->update($validated);
+
+    return redirect()->route('students.index')
+        ->with('success', 'Student updated successfully.');
+}
 
     public function destroy(Student $student)
-    {
-        $student->delete();
+{
+    $this->authorize('delete', $student);
 
-        return redirect()->route('students.index')
-            ->with('success', 'Student deleted successfully.');
-    }
+    $student->delete();
+
+    return redirect()->route('students.index')
+        ->with('success', 'Student deleted successfully.');
+}
 }
