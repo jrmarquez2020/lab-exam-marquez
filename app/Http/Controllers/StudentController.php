@@ -48,13 +48,14 @@ class StudentController extends Controller
         return view('students.show', compact('student'));
     }
 
-    public function edit(Student $student)
-    {
-        $this->authorize('update', $student);
-        $courses = Course::all();
+   public function edit(Student $student)
+{
+    $this->authorize('update', $student);
 
-        return view('students.edit', compact('student', 'courses'));
-    }
+    $courses = Course::all();
+
+    return view('students.edit', compact('student', 'courses'));
+}
 
   public function update(Request $request, Student $student)
     {
