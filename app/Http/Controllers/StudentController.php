@@ -50,13 +50,14 @@ class StudentController extends Controller
 
     public function edit(Student $student)
     {
+        $this->authorize('update', $student);
         $courses = Course::all();
 
         return view('students.edit', compact('student', 'courses'));
     }
 
-   public function update(Request $request, Student $student)
-{
+  public function update(Request $request, Student $student)
+    {
     $this->authorize('update', $student);
 
     $validated = $request->validate([
@@ -76,7 +77,7 @@ class StudentController extends Controller
         ->with('success', 'Student updated successfully.');
 }
 
-    public function destroy(Student $student)
+   public function destroy(Student $student)
 {
     $this->authorize('delete', $student);
 
